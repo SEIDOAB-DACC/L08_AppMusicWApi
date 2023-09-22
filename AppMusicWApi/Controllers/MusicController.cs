@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using Models;
+using Models.DTO;
 using Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -110,7 +111,33 @@ namespace AppMusicWApi.Controllers
             }
         }
 
-        //GET: api/music/readitem
+        //GET: api/music/readitemdto
+        [HttpGet()]
+        [ActionName("ReadItemDto")]
+        [ProducesResponseType(200, Type = typeof(csMusicGroupCUdto))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> ReadItemDto(string id)
+        {
+            try
+            {
+                var _id = Guid.Parse(id);
+                var mg = await _service.ReadItem(_id, false);
+
+                if (mg == null)
+                {
+                    return BadRequest($"Item with id {id} does not exist");
+                }
+
+                var dto = new csMusicGroupCUdto(mg);
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //GET: api/music/deleteitem
         [HttpGet()]
         [ActionName("DeleteItem")]
         [ProducesResponseType(200, Type = typeof(csMusicGroup))]
@@ -140,6 +167,31 @@ namespace AppMusicWApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //Put: api/music/updateitem
+        [HttpPut("{id}")]
+        [ActionName("UpdateItem")]
+        [ProducesResponseType(200, Type = typeof(csMusicGroup))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> UpdateItem(string id, [FromBody] csMusicGroupCUdto item)
+        {
+            try
+            {
+                var _id = Guid.Parse(id);
+
+                if (item.MusicGroupId != _id)
+                    throw new Exception("Id mismatch");
+
+                var mg = await _service.UpdateItem(item);
+
+                return Ok(mg);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         public MusicController(IMusicService service , ILogger<MusicController> logger)
         {

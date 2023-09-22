@@ -4,6 +4,7 @@ using DbContext;
 using DbModels;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTO;
 
 namespace Services;
 
@@ -73,7 +74,7 @@ public class csMusicService : IMusicService
         }
     }
 
-    public async Task<csMusicGroup> ReadItem (Guid id, bool flat)
+    public async Task<csMusicGroup> ReadItem(Guid id, bool flat)
     {
         using (var db = csMainDbContext.DbContext("sysadmin"))
         {
@@ -93,5 +94,45 @@ public class csMusicService : IMusicService
             }
         }
     }
+
+    public async Task<csMusicGroup> UpdateItem(csMusicGroupCUdto _src)
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            var _query1 = db.MusicGroups.Where(mg => mg.MusicGroupId == _src.MusicGroupId);
+            var _item = await _query1.Include(mg => mg.Albums).FirstOrDefaultAsync();
+
+            _item.Name = _src.Name;
+            _item.EstablishedYear = _src.EstablishedYear;
+            _item.Genre = _src.Genre;
+
+            await csMusicGroupCUdto_To_csMusicGroup_Navigation(db, _src, _item);
+
+            db.MusicGroups.Update(_item);
+            await db.SaveChangesAsync();
+
+            return (_item);
+        }
+    }
+
+
+    public async Task csMusicGroupCUdto_To_csMusicGroup_Navigation(csMainDbContext db,
+        csMusicGroupCUdto _src, csMusicGroup _dst)
+    {
+        List<csAlbum> _albums = new List<csAlbum>();
+        foreach (var id in _src.AlbumsId)
+        {
+            var _album = await db.Albums.FirstOrDefaultAsync(a => a.AlbumId == id);
+
+            if (_album == null)
+                throw new ArgumentException($"Item id {id} not existing");
+
+            _albums.Add(_album);
+        }
+
+        _dst.Albums = _albums;
+    }
 }
+
+
 

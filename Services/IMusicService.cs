@@ -1,5 +1,6 @@
 ﻿using System;
 using DbModels;
+using Models.DTO;
 
 namespace Services
 {
@@ -10,6 +11,8 @@ namespace Services
 
         public Task<List<csMusicGroup>> Read(bool flat);
         public Task<csMusicGroup> ReadItem(Guid id, bool flat);
+
+        public Task<csMusicGroup> UpdateItem(csMusicGroupCUdto _src);
     }
 }
 

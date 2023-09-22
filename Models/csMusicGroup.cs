@@ -13,7 +13,6 @@ namespace DbModels
 {
     public enum enMusicGenre {Rock, Blues, Jazz, Metall }
 
-
     public class csMusicGroup //: ISeed<csMusicGroup>
     {
         [Key]       
