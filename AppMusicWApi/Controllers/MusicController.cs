@@ -192,6 +192,24 @@ namespace AppMusicWApi.Controllers
             }
         }
 
+        //Post: api/music/updateitem
+        [HttpPost()]
+        [ActionName("CreateItem")]
+        [ProducesResponseType(200, Type = typeof(csMusicGroup))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> CreateItem([FromBody] csMusicGroupCUdto item)
+        {
+            try
+            {
+                var mg = await _service.CreateItem(item);
+
+                return Ok(mg);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         public MusicController(IMusicService service , ILogger<MusicController> logger)
         {

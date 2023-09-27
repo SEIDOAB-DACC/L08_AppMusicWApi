@@ -13,6 +13,7 @@ namespace Services
         public Task<csMusicGroup> ReadItem(Guid id, bool flat);
 
         public Task<csMusicGroup> UpdateItem(csMusicGroupCUdto _src);
+        public Task<csMusicGroup> CreateItem(csMusicGroupCUdto _src);
     }
 }
 

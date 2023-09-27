@@ -115,6 +115,21 @@ public class csMusicService : IMusicService
         }
     }
 
+    public async Task<csMusicGroup> CreateItem(csMusicGroupCUdto _src)
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            var _item = new csMusicGroup(_src);
+
+            await csMusicGroupCUdto_To_csMusicGroup_Navigation(db, _src, _item);
+
+            db.MusicGroups.Update(_item);
+            await db.SaveChangesAsync();
+
+            return (_item);
+        }
+    }
+
 
     public async Task csMusicGroupCUdto_To_csMusicGroup_Navigation(csMainDbContext db,
         csMusicGroupCUdto _src, csMusicGroup _dst)

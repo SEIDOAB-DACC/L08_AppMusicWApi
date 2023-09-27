@@ -7,6 +7,7 @@ using System.Linq;
 
 using Configuration;
 using Models;
+using Models.DTO;
 
 
 namespace DbModels
@@ -36,6 +37,14 @@ namespace DbModels
 
         public csMusicGroup()
         {
+        }
+        public csMusicGroup(csMusicGroupCUdto _dto)
+        {
+            MusicGroupId = Guid.NewGuid();
+            Name = _dto.Name;
+            EstablishedYear = _dto.EstablishedYear;
+            Genre = _dto.Genre;
+            Seeded = false;
         }
 
         public csMusicGroup Seed(csSeedGenerator sgen)
