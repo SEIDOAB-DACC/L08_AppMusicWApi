@@ -123,7 +123,7 @@ public class csMusicService : IMusicService
 
             await csMusicGroupCUdto_To_csMusicGroup_Navigation(db, _src, _item);
 
-            db.MusicGroups.Update(_item);
+            db.MusicGroups.Add(_item);  //istf update
             await db.SaveChangesAsync();
 
             return (_item);
