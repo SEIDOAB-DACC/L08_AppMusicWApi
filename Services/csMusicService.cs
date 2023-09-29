@@ -106,7 +106,7 @@ public class csMusicService : IMusicService
             _item.EstablishedYear = _src.EstablishedYear;
             _item.Genre = _src.Genre;
 
-            await csMusicGroupCUdto_To_csMusicGroup_Navigation(db, _src, _item);
+            await csMusicGroupCUdto_To_csMusicGroup_NavProp(db, _src, _item);
 
             db.MusicGroups.Update(_item);
             await db.SaveChangesAsync();
@@ -121,7 +121,7 @@ public class csMusicService : IMusicService
         {
             var _item = new csMusicGroup(_src);
 
-            await csMusicGroupCUdto_To_csMusicGroup_Navigation(db, _src, _item);
+            await csMusicGroupCUdto_To_csMusicGroup_NavProp(db, _src, _item);
 
             db.MusicGroups.Add(_item);  //istf update
             await db.SaveChangesAsync();
@@ -131,7 +131,7 @@ public class csMusicService : IMusicService
     }
 
 
-    public async Task csMusicGroupCUdto_To_csMusicGroup_Navigation(csMainDbContext db,
+    public async Task csMusicGroupCUdto_To_csMusicGroup_NavProp(csMainDbContext db,
         csMusicGroupCUdto _src, csMusicGroup _dst)
     {
         List<csAlbum> _albums = new List<csAlbum>();
