@@ -35,18 +35,28 @@ namespace DbModels
 
         public List<csAlbum> Albums { get; set; } = new List<csAlbum>();
 
+        #region Constructors
         public csMusicGroup()
         {
         }
         public csMusicGroup(csMusicGroupCUdto _dto)
         {
             MusicGroupId = Guid.NewGuid();
+            UpdateFromDTO(_dto);
+        }
+        #endregion
+
+        #region Update from DTO
+        public csMusicGroup UpdateFromDTO(csMusicGroupCUdto _dto)
+        {
             Name = _dto.Name;
             EstablishedYear = _dto.EstablishedYear;
             Genre = _dto.Genre;
             Seeded = false;
-        }
 
+            return this;
+        }
+        #endregion
         public csMusicGroup Seed(csSeedGenerator sgen)
         {
             var mg = new csMusicGroup

@@ -102,9 +102,7 @@ public class csMusicService : IMusicService
             var _query1 = db.MusicGroups.Where(mg => mg.MusicGroupId == _src.MusicGroupId);
             var _item = await _query1.Include(mg => mg.Albums).FirstOrDefaultAsync();
 
-            _item.Name = _src.Name;
-            _item.EstablishedYear = _src.EstablishedYear;
-            _item.Genre = _src.Genre;
+            _item.UpdateFromDTO(_src);
 
             await csMusicGroupCUdto_To_csMusicGroup_NavProp(db, _src, _item);
 
